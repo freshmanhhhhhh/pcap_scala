@@ -205,7 +205,7 @@ public class pcaptest {
             Packet packet=(new returnPacket(tt._2)).createPacket();
             list.add(packet);
         });
-        System.out.println(list.size());
+        System.out.println(list.size());//
 
 /*
         class setLength implements Function<Tuple2<IntWritable,BytesWritable>,String> {
