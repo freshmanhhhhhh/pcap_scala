@@ -6,11 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="pcap_scala2" />
         <module name="pcaptest" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="pcap_scala2" target="8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
