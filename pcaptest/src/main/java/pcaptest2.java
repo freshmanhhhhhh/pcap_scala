@@ -8,6 +8,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.apache.hadoop.mapreduce.lib.input.SequenceFileAsBinaryInputFormat;
 public class pcaptest2 {
     public static void main(String args[]){
         String warehouseLocation = new File("spark-warehouse").getAbsolutePath();
@@ -18,7 +19,7 @@ public class pcaptest2 {
                 .config("spark.sql.warehouse.dir", warehouseLocation)
                 .enableHiveSupport()
                 .getOrCreate();
-        spark.sql("CREATE TABLE IF NOT EXISTS src (key Int, value Binary) USING hive OPTIONS(fileFormat 'sequencefile')");
+        spark.sql("CREATE TABLE IF NOT EXISTS src (key Int, value Binary) USING hive OPTIONS(inputFormat 'org.apache.hadoop.mapreduce.lib.input.SequenceFileAsBinaryInputFormat',outputFormat 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat',serde 'MySerDe')");
         spark.sql("LOAD DATA LOCAL INPATH '/home/bjbhaha/Envroment/hadoop-2.7.3/bin/music31.seq' INTO TABLE src");
 
 // Queries are expressed in HiveQL

@@ -407,13 +407,13 @@ public class returnPacket {
         Packet packet = new Packet();
         System.arraycopy(this.value.getBytes(), 0, pcapPacketHeader, 0, PACKET_HEADER_SIZE);
         long packetTimestamp = PcapReaderUtil.convertInt(pcapPacketHeader, TIMESTAMP_OFFSET, reverseHeaderByteOrder);
-        //packet.put(Packet.TIMESTAMP, packetTimestamp);
+        packet.put(Packet.TIMESTAMP, packetTimestamp);
 
         long packetTimestampMicros = PcapReaderUtil.convertInt(pcapPacketHeader, TIMESTAMP_MICROS_OFFSET, reverseHeaderByteOrder);
-        //packet.put(Packet.TIMESTAMP_MICROS, packetTimestampMicros);
+        packet.put(Packet.TIMESTAMP_MICROS, packetTimestampMicros);
 
         BigDecimal packetTimestampUsec = new BigDecimal(packetTimestamp + packetTimestampMicros / 1000000.0, tsUsecMc);
-        //packet.put(Packet.TIMESTAMP_USEC, packetTimestampUsec.doubleValue());
+        packet.put(Packet.TIMESTAMP_USEC, packetTimestampUsec.doubleValue());
 
         long packetSize = PcapReaderUtil.convertInt(pcapPacketHeader, CAP_LEN_OFFSET, reverseHeaderByteOrder);
         int s=(int)packetSize;
