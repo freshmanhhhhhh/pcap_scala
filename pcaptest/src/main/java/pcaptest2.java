@@ -18,7 +18,7 @@ public class pcaptest2 {
                 .config("spark.sql.warehouse.dir", warehouseLocation)
                 .enableHiveSupport()
                 .getOrCreate();
-        spark.sql("CREATE TABLE IF NOT EXISTS src (key int, value binary) USING hive OPTIONS(fileFormat 'sequencefile')");
+        spark.sql("CREATE TABLE IF NOT EXISTS src (key Int, value Binary) USING hive OPTIONS(fileFormat 'sequencefile')");
         spark.sql("LOAD DATA LOCAL INPATH '/home/bjbhaha/Envroment/hadoop-2.7.3/bin/music31.seq' INTO TABLE src");
 
 // Queries are expressed in HiveQL
