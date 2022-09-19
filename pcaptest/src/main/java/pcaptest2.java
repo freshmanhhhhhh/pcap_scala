@@ -19,10 +19,11 @@ public class pcaptest2 {
                 .config("spark.sql.warehouse.dir", warehouseLocation)
                 .enableHiveSupport()
                 .getOrCreate();
-        spark.sql("CREATE TABLE IF NOT EXISTS src (key Int, value Binary) USING hive OPTIONS(inputFormat 'org.apache.hadoop.mapreduce.lib.input.SequenceFileAsBinaryInputFormat',outputFormat 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat',serde 'MySerDe')");
+        spark.sql("CREATE TABLE IF NOT EXISTS src (TIMESTAMP long, TIMESTAMP_USEC long,TIMESTAMP_MICROS long) USING hive OPTIONS(inputFormat 'org.apache.hadoop.mapreduce.lib.input.SequenceFileAsBinaryInputFormat',outputFormat 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat',serde 'MySerDe')");
         spark.sql("LOAD DATA LOCAL INPATH '/home/bjbhaha/Envroment/hadoop-2.7.3/bin/music31.seq' INTO TABLE src");
 
 // Queries are expressed in HiveQL
+        spark.sql("SELECT * FROM src").show();
         spark.sql("SELECT * FROM src").show();
     }
 }
