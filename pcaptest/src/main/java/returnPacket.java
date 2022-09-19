@@ -416,7 +416,9 @@ public class returnPacket {
         //packet.put(Packet.TIMESTAMP_USEC, packetTimestampUsec.doubleValue());
 
         long packetSize = PcapReaderUtil.convertInt(pcapPacketHeader, CAP_LEN_OFFSET, reverseHeaderByteOrder);
-        System.arraycopy(this.value.getBytes(), 0, packetData, 0, (int)packetSize);
+        int s=(int)packetSize;
+        packetData=new byte[(int)packetSize];
+        System.arraycopy(this.value.getBytes(), 16, packetData, 0, (int)packetSize);
         /*bjb*/
         int ipStart = findIPStart(packetData);
         if (ipStart == -1)
