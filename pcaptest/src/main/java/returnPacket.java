@@ -70,9 +70,11 @@ public class returnPacket {
 
     //byte[] pcapPacketHeader;
     byte[] packetData;
+    byte[] pcapPacketHeader = new byte[PACKET_HEADER_SIZE];
     returnPacket(BytesWritable value) {
         this.value = value;
-        packetData = this.value.getBytes();
+        System.arraycopy(this.value.getBytes(), 0, pcapPacketHeader, 0, PACKET_HEADER_SIZE);
+
         //snapLen = PcapReaderUtil.convertInt(pcapPacketHeader, PCAP_HEADER_SNAPLEN_OFFSET, reverseHeaderByteOrder);
 
         //long linkTypeVal = PcapReaderUtil.convertInt(pcapPacketHeader, PCAP_HEADER_LINKTYPE_OFFSET, reverseHeaderByteOrder);
@@ -403,20 +405,18 @@ public class returnPacket {
 
     public Packet createPacket() {
         Packet packet = new Packet();
-        //byte[] pcapPacketHeader = new byte[PACKET_HEADER_SIZE];
 
-//        System.arraycopy(pcapPacketHeader, 0, this.value.getBytes(), 0, PACKET_HEADER_SIZE);
-//        long packetTimestamp = PcapReaderUtil.convertInt(pcapPacketHeader, TIMESTAMP_OFFSET, reverseHeaderByteOrder);
-//        //packet.put(Packet.TIMESTAMP, packetTimestamp);
-//
-//        long packetTimestampMicros = PcapReaderUtil.convertInt(pcapPacketHeader, TIMESTAMP_MICROS_OFFSET, reverseHeaderByteOrder);
-//        //packet.put(Packet.TIMESTAMP_MICROS, packetTimestampMicros);
-//
-//        BigDecimal packetTimestampUsec = new BigDecimal(packetTimestamp + packetTimestampMicros / 1000000.0, tsUsecMc);
-//        //packet.put(Packet.TIMESTAMP_USEC, packetTimestampUsec.doubleValue());
-//
-//        long packetSize = PcapReaderUtil.convertInt(pcapPacketHeader, CAP_LEN_OFFSET, reverseHeaderByteOrder);
+        long packetTimestamp = PcapReaderUtil.convertInt(pcapPacketHeader, TIMESTAMP_OFFSET, reverseHeaderByteOrder);
+        //packet.put(Packet.TIMESTAMP, packetTimestamp);
 
+        long packetTimestampMicros = PcapReaderUtil.convertInt(pcapPacketHeader, TIMESTAMP_MICROS_OFFSET, reverseHeaderByteOrder);
+        //packet.put(Packet.TIMESTAMP_MICROS, packetTimestampMicros);
+
+        BigDecimal packetTimestampUsec = new BigDecimal(packetTimestamp + packetTimestampMicros / 1000000.0, tsUsecMc);
+        //packet.put(Packet.TIMESTAMP_USEC, packetTimestampUsec.doubleValue());
+
+        long packetSize = PcapReaderUtil.convertInt(pcapPacketHeader, CAP_LEN_OFFSET, reverseHeaderByteOrder);
+        System.arraycopy(this.value.getBytes(), 0, packetData, 0, (int)packetSize);
         /*bjb*/
         int ipStart = findIPStart(packetData);
         if (ipStart == -1)
