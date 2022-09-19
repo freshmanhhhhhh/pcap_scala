@@ -73,7 +73,7 @@ public class returnPacket {
     byte[] pcapPacketHeader = new byte[PACKET_HEADER_SIZE];
     returnPacket(BytesWritable value) {
         this.value = value;
-        System.arraycopy(this.value.getBytes(), 0, pcapPacketHeader, 0, PACKET_HEADER_SIZE);
+
 
         //snapLen = PcapReaderUtil.convertInt(pcapPacketHeader, PCAP_HEADER_SNAPLEN_OFFSET, reverseHeaderByteOrder);
 
@@ -405,7 +405,7 @@ public class returnPacket {
 
     public Packet createPacket() {
         Packet packet = new Packet();
-
+        System.arraycopy(this.value.getBytes(), 0, pcapPacketHeader, 0, PACKET_HEADER_SIZE);
         long packetTimestamp = PcapReaderUtil.convertInt(pcapPacketHeader, TIMESTAMP_OFFSET, reverseHeaderByteOrder);
         //packet.put(Packet.TIMESTAMP, packetTimestamp);
 
