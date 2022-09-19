@@ -420,6 +420,7 @@ public class returnPacket {
         packetData=new byte[(int)packetSize];
         System.arraycopy(this.value.getBytes(), 16, packetData, 0, (int)packetSize);
         /*bjb*/
+        BytesWritable b=new BytesWritable(packetData);
         int ipStart = findIPStart(packetData);
         if (ipStart == -1)
             return packet;
