@@ -10,6 +10,7 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Writable;
+import scala.reflect.internal.StdNames;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,11 +56,14 @@ public class PcapDeserializer implements Deserializer {
 		BytesWritable obj = (BytesWritable)w;
 		Packet packet =new returnPacket(obj).createPacket();
 
-        for (int i = 0; i < numColumns; i++) {
+		int i;
+        for (i = 0; i < numColumns-1; i++) {
             String columName = columnNames.get(i);
             Object value = packet.get(columName);
            	row.set(i, value);
         }
+
+		row.set(i,obj.getBytes());
         return row;
 	}
 
