@@ -63,7 +63,7 @@ public class PcapDeserializer implements Deserializer {
            	row.set(i, value);
         }
 
-		row.set(i,obj.getBytes());
+		row.set(i,(obj.getBytes()));
         return row;
 	}
 
