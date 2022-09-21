@@ -67,27 +67,35 @@ public class pcaptest2 {
 
 // Queries are expressed in HiveQL
         JavaRDD<Object> pcapByte= spark.sql("SELECT pcapByte FROM src where src='10.222.181.148' and dst='120.240.50.212'").toJavaRDD().map(row->row.get(0));
-        //pcapByte.foreach(x->System.out.println(new BytesWritable(ObjectToByte(x))));
-        pcapByte.foreach(x->System.out.println(new BytesWritable((byte[])((byte[])(x)))));
-//        DataOutputStream dos = new DataOutputStream(new FileOutputStream("/home/bjbhaha/Desktop/music31.pcap"));
-//        byte pcapHeader[] = new byte[]{(byte) 0xD4, (byte) 0xC3, (byte) 0xB2, (byte) 0xA1, 0x02, 0x00, 0x04,
-//                0x00,0x00, 0x00, 0x00, 0x00, 0x00, 0x00,0x00,0x00,0x00,0x00,0x04,0x00,0x01,0x00,0x00,0x00};
-//        dos.write(pcapHeader,0,24);
-//        List<byte[]> list=new ArrayList<>();
-//        list=pcapByte.map(x->{//
-//            int l=x.getLength();
-//            byte[] a=new byte[l-27];
-//            System.arraycopy(x.getBytes(),27,a,0,l);
+
+        //pcapByte.foreach(x->System.out.println(new BytesWritable((byte[])((byte[])(x)))));
+        DataOutputStream dos = new DataOutputStream(new FileOutputStream("/home/bjbhaha/Desktop/music31.pcap"));
+        byte pcapHeader[] = new byte[]{(byte) 0xD4, (byte) 0xC3, (byte) 0xB2, (byte) 0xA1, 0x02, 0x00, 0x04,
+                0x00,0x00, 0x00, 0x00, 0x00, 0x00, 0x00,0x00,0x00,0x00,0x00,0x04,0x00,0x01,0x00,0x00,0x00};
+        dos.write(pcapHeader,0,24);
+        List<byte[]> list=new ArrayList<>();
+//        JavaRDD<BytesWritable> pcapByte2=pcapByte.map(x->{
+//            long packetSize = PcapReaderUtil.convertInt((byte[])((byte[])(x)), 8, false);
+//            BytesWritable a= new BytesWritable((byte[])((byte[])(x)));
+//            a.setSize((int)(packetSize)+16);
 //            return a;
-//        }).collect();
-//        list.forEach(tt->{
-//            System.out.println(tt);
-//            try {
-//                dos.write(tt, 0, tt.length);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
 //        });
-//        //spark.sql("SELECT * FROM src").show();
+
+        list=pcapByte.map(x->{//
+            long packetSize = PcapReaderUtil.convertInt((byte[])((byte[])(x)), 8, false);
+            int l=(int)packetSize+16;
+            byte[] a=new byte[l];
+            System.arraycopy((byte[])((byte[])(x)),0,a,0,l);
+            return a;
+        }).collect();
+        list.forEach(tt->{
+            System.out.println(new BytesWritable(tt));
+            try {
+                dos.write(tt, 0, tt.length);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        //spark.sql("SELECT * FROM src").show();
     }
 }
