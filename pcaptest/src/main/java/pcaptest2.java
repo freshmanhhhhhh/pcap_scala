@@ -66,7 +66,7 @@ public class pcaptest2 {
         spark.sql("LOAD DATA LOCAL INPATH '/home/bjbhaha/Envroment/hadoop-2.7.3/bin/music31.seq' INTO TABLE src").show();
 
 // Queries are expressed in HiveQL
-        JavaRDD<Object> pcapByte= spark.sql("SELECT pcapByte FROM src where src='10.222.181.148' and dst='120.240.50.212'").toJavaRDD().map(row->row.get(0));
+        JavaRDD<Object> pcapByte= spark.sql(args[0]).toJavaRDD().map(row->row.get(0));
 
         //pcapByte.foreach(x->System.out.println(new BytesWritable((byte[])((byte[])(x)))));
         DataOutputStream dos = new DataOutputStream(new FileOutputStream("/home/bjbhaha/Desktop/music31.pcap"));
